@@ -1,22 +1,54 @@
 template <typename T>
 void MinHeap<T>::siftUp(int i) {
     // TODO: Move element at index i upward until heap property restored
+    while(i > 0 && data[i] < data[parent(i)]){
+        swap(data[i], data[parent(i)]);
+        i = parent(i);
+    }
 }
 
 template <typename T>
 void MinHeap<T>::siftDown(int i) {
+    
     // TODO: Move element at index i downward until heap property restored
+    while(true){
+    int smallest = i;
+    if(left(i) < data.size() && data[left(i)] < data[smallest]){
+        smallest = left(i);
+    }
+    if(right(i) < data.size() && data[right(i)] < data[smallest]){
+        smallest = right(i);
+    }
+    if (smallest == i){
+        break;
+    }
+    else{
+        swap(data[i], data[smallest]);
+        i = smallest;
+    }
+}
 }
 
 template <typename T>
 void MinHeap<T>::insert(const T& value) {
     // TO DO: insert a value into the heap
+    data.push_back(value);
+    siftUp(data.size() - 1);
 }
 
 template <typename T>
 T MinHeap<T>::removeRoot() {
     T rootValue;
     // TODO: Implement removing the root element.
+    if(empty()){
+        throw string("Heap is empty");
+    }
+    rootValue = data[0];
+    swap(data[0], data.back());
+    data.pop_back();
+    if(!empty()){
+    siftDown(0);
+    }
     return rootValue;
 }
 
@@ -27,7 +59,10 @@ void MinHeap<T>::removeAt(int index) {
 
     swap(data[index], data.back());
     data.pop_back();
-
-    // TODO: Attempt sift-up then 
+    // TODO: Attempt sift-up then
     // sift-down to restore heap property
+    if(index < size()){
+    siftUp(index);
+    siftDown(index);
+    }
 }
